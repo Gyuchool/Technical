@@ -3,6 +3,7 @@ package com.batch.spring;
 import com.batch.spring.domain.Member;
 import com.batch.spring.domain.QMember;
 import com.batch.spring.domain.Team;
+import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,21 +60,10 @@ class ApplicationTests {
     }
 
     @Test
-    public void startJPQL() throws Exception {
-        //member1 find
-        String qlString = "select m from Member m where m.username = :username";
-        Member findMember = em.createQuery(qlString, Member.class)
-                .setParameter("username", "member1").getSingleResult();
-
-        assertThat(findMember.getUsername()).isEqualTo("member1");
-
-    }
-
-    @Test
     public void startQuerydsl() throws Exception {
         //member1을 찾아라.
         QMember m = QMember.member;
-        Member findMember = queryFactory .select(m)
+        Member findMember = queryFactory.select(m)
                 .from(m)
                 .where(m.username.eq("member1"))//파라미터 바인딩 처리
                 .fetchOne();
@@ -81,21 +71,56 @@ class ApplicationTests {
     }
 
     @Test
-    void contextLoads() {
-        Hello hello = new Hello();
-        em.persist(hello);
+    public void searchAndParam() throws Exception {
+        //given
+        QMember member = QMember.member;
+        Member findMember = queryFactory
+                .selectFrom(member)
+                .where(
 
-        JPAQueryFactory query = new JPAQueryFactory(em);
-        QHello qHello = QHello.hello;
+                        member.username.eq("member1"),
+                        member.age.eq(10)
 
-        Hello result = query
-                .selectFrom(qHello)
+                        //같은 방식   and or 쓰냐 안쓰냐 차이
+//                        member.username.eq("member1")
+//                        .and(member.age.eq(10))
+
+                )
                 .fetchOne();
-
-        assertThat(result).isEqualTo(hello);
-        assertThat(result.getId()).isEqualTo(hello.getId());
-
+        assertThat(findMember.getUsername()).isEqualTo("member1");
     }
 
 
+    @Test
+    public void resultFetchTest() throws Exception {
+        QMember member = QMember.member;
+
+        //given
+        List<Member> fetch = queryFactory
+                .selectFrom(member)
+                .fetch();
+
+        //.NonUniqueResultException 에러 발생 expect
+//        Member fetchOne = queryFactory
+//                .selectFrom(QMember.member)
+//                .fetchOne();
+
+
+        Member fetchFirst = queryFactory
+                .selectFrom(QMember.member)
+                .fetchFirst();
+
+        QueryResults<Member> results = queryFactory
+                .selectFrom(member)
+                .fetchResults();
+
+        results.getTotal();
+        List<Member> content = results.getResults();
+
+        long total = queryFactory
+                .selectFrom(member)
+                .fetchCount();
+
+
+    }
 }
