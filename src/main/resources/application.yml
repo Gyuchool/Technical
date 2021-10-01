@@ -1,6 +1,27 @@
 spring:
   profiles:
     active: local
+  boot:
+    admin:
+      client:
+        url: http://localhost:18080 #server url
+        username: admin
+        password: admin
+        instance:
+          #name: giron-app  # 어플리케이션 명을 설정할 수 있다.
+          metadata: # 어플리케이션 (스프링 시큐리티)로그인 정보
+            user:
+              name: admin
+              password: admin
+          service-url: http://localhost:8080 #clientUrl
+  endpoint:
+    health:
+      show-details: always
+  endpoints:  #admin에서 모니터링 가능하도록 앤드포인트 모두 열어두기
+    web:
+      exposure:
+        include: "*"
+
   datasource:
     url: jdbc:h2:tcp://localhost/~/application
     username: sa
