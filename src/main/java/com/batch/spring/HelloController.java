@@ -11,6 +11,5 @@ public class HelloController {
         return "hello";
     }
 
-    //충돌 테스트 실험
     //충돌 테스트 실험 2
 }
