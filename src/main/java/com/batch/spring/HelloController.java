@@ -10,5 +10,7 @@ public class HelloController {
     public String hello() {
         return "hello";
     }
+    //충돌 테스트 실험 2
+    //이러면 충돌이 발생하겠지..?
     //충돌 발생하기
 }
