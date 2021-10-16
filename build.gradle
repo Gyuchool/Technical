@@ -37,6 +37,9 @@ dependencies {
     //Client 의존성 주입 client-damin
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'de.codecentric:spring-boot-admin-starter-client:2.4.1'
+    //naver-sms-api
+    compileOnly 'org.apache.httpcomponents:httpcore:4.4.1'
+    compileOnly 'org.apache.httpcomponents:httpclient:4.5.3'
 }
 
 test {

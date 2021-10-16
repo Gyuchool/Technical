@@ -38,7 +38,10 @@ spring:
 
     open-in-view: false
 
-
+sms:
+  serviceId: "ncp:sms:kr:273758641428:giron-test-sms"
+  accessKey: "8HqThcPzrehrK813MpTe"
+  secretKey: "ATN7RgbLO2pYwJ6J6nGKeqeKAUgSHg4CW9pSTJ6h"
 logging:
   level:
     org.hibernate.SQL: debug
