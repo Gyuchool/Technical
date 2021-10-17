@@ -2,13 +2,22 @@ package com.batch.spring.sms.dto;
 
 import lombok.*;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Setter
-@Getter
 public class Request {
-    private String recipientPhoneNumber;
-    private String title;
-    private String content;
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class CheckPhoneNumber {
+        private String recipientPhoneNumber;
+
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class CheckAuthNumber{
+        private String authNumber;
+    }
 
 }

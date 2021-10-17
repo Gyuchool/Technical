@@ -1,6 +1,7 @@
 package com.batch.spring.sms;
 
 import com.batch.spring.sms.dto.MessagesDto;
+import com.batch.spring.sms.dto.Response;
 import com.batch.spring.sms.dto.SmsRequest;
 import com.batch.spring.sms.dto.SmsResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -24,6 +25,8 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -37,7 +40,9 @@ public class SmsService {
     private String secretKey;
 
 
-    public SmsResponse sendSms(String recipientPhoneNumber, String content) throws JsonProcessingException, UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, URISyntaxException {
+    public SmsResponse sendSms(String recipientPhoneNumber) throws JsonProcessingException, UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, URISyntaxException {
+       String AuthNumber = makeAuthenticationNumber();
+       String content = "[giron(주)]\n인증번호 ["+AuthNumber+"]를 입력해주세요.";
         Long time = System.currentTimeMillis();
         List<MessagesDto> messages = new ArrayList<>();
         messages.add(new MessagesDto(recipientPhoneNumber, content));
@@ -91,4 +96,14 @@ public class SmsService {
 
         return encodeBase64String;
     }
+
+    private String makeAuthenticationNumber(){
+        StringBuilder authNumber= new StringBuilder();
+
+        for(int i=0; i<6; i++){
+            authNumber.append((int) (Math.random() * 10));
+        }
+        return authNumber.toString();
+    }
+
 }
